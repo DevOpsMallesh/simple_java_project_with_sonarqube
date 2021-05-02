@@ -12,7 +12,7 @@ pipeline {
 		stage("SonarQube analysis") {
            
             steps {
-				scripts{
+				script{
               withSonarQubeEnv('SonarQubeJenkins') {
                 sh 'mvn sonar:sonar'
 				}
