@@ -32,7 +32,7 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-		stage("deploy in tomcat with ansible"){
+		stage('deploy in tomcat with ansible'){
 		steps{
 			ansiblePlaybook become: true, credentialsId: 'Jenkins-Slave', inventory: '$WORKSPACE', playbook: 'ansible_tomcat.yaml'
 		}
