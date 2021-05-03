@@ -6,14 +6,14 @@ pipeline {
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'main', credentialsId: 'f982a97f-4c9c-4f01-abf2-f5befc5d305d', url: 'https://github.com/DevOpsMallesh/HCL_SampleApplication.git'
+                git branch: 'main', credentialsId: 'f982a97f-4c9c-4f01-abf2-f5befc5d305d', url: 'https://github.com/DevOpsMallesh/simple_java_project_with_sonarqube.git'
             }
         }
 		stage("SonarQube analysis") {
            
             steps {
 				script{
-              withSonarQubeEnv('SonarQubeJenkins') {
+              withSonarQubeEnv('JenkinsSonarQube') {
                 sh 'mvn sonar:sonar'
 				}
 				}
@@ -32,11 +32,6 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-		stage('deploy in tomcat with ansible'){
-		steps{
-			ansiblePlaybook become: true, credentialsId: 'Jenkins-Slave', inventory: '$WORKSPACE', playbook: 'ansible_tomcat.yaml'
-		}
-		}
     }
 }
 
