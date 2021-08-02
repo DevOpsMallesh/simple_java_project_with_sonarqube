@@ -13,7 +13,7 @@ pipeline {
            
             steps {
 				script{
-              withSonarQubeEnv('JenkinsSonarQube') {
+              withSonarQubeEnv('sonarqube-test') {
                 sh 'mvn sonar:sonar'
 				}
 				}
