@@ -16,7 +16,7 @@ pipeline {
            
             steps {
 				script{
-              withSonarQubeEnv('sonarqube-test') {
+              withSonarQubeEnv('sonarqube-server-test') {
                 sh 'mvn sonar:sonar'
 		      //sh "${scannerHome}/bin/sonar-scanner"
 		      //sh 'mvn clean package sonar:sonar'
