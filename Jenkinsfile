@@ -1,43 +1,30 @@
 pipeline {
     agent any
-    //environment {
-        //scannerHome = tool 'sonarqube-test'
-    //}
-    tools {
-    maven 'Maven3'
-  }
     stages {
-        stage('Git Checkout') {
+        stage('SCM') {
             steps {
-                git branch: 'master', credentialsId: 'f982a97f-4c9c-4f01-abf2-f5befc5d305d', url: 'https://github.com/DevOpsMallesh/simple_java_project_with_sonarqube.git'
+                git url: 'https://github.com/DevOpsMallesh/simple_java_project_with_sonarqube.git'
             }
         }
-		stage("SonarQube analysis") {
-           
+        stage('build && SonarQube analysis') {
             steps {
-				script{
-              withSonarQubeEnv('sonarqube-server-test') {
-                sh 'mvn sonar:sonar'
-		      //sh "${scannerHome}/bin/sonar-scanner"
-		      //sh 'mvn clean package sonar:sonar'
-				}
-				}
-				}
-				}
-		stage("Quality Gate and build") {
-			steps{
-              timeout(time: 1, unit: 'HOURS') {
-              waitForQualityGate abortPipeline: true
-              }
+                withSonarQubeEnv('sonarqube-server-test') {
+                    // Optionally use a Maven environment you've configured already
+                    withMaven(maven:'Maven3') {
+                        sh 'mvn clean package sonar:sonar'
+                    }
+                }
             }
-          }
-		  
-        stage('Build'){
-            steps{
-                sh 'mvn clean install'
+        }
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
             }
         }
     }
 }
-
 
