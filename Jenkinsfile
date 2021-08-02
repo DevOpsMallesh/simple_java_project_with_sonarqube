@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        scannerHome = tool 'sonarqube-server-test'
+        scannerHome = tool 'sonarqube-test'
     }
     tools {
     maven 'Maven3'
@@ -17,7 +17,8 @@ pipeline {
             steps {
 				script{
               withSonarQubeEnv('scannerHome') {
-                sh 'mvn sonar:sonar'
+                #sh 'mvn sonar:sonar'
+		      sh "${scannerHome}/bin/sonar-scanner"
 				}
 				}
 				}
