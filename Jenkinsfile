@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    tools {
+        maven 'Maven3' 
+    }
     stages {
         stage('SCM') {
             steps {
@@ -10,7 +13,7 @@ pipeline {
             steps {
                 withSonarQubeEnv('sonarqube-server-test') {
                     // Optionally use a Maven environment you've configured already
-                    withMaven(maven:'Maven 3.5') {
+                    withMaven(maven:'Maven3') {
                         sh 'mvn clean package sonar:sonar'
                     }
                 }
