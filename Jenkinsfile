@@ -11,23 +11,21 @@ pipeline {
         }
         stage('build && SonarQube analysis') {
             steps {
-                withSonarQubeEnv('sonarqube-server-test') {
-                    // Optionally use a Maven environment you've configured already
-                    withMaven(maven:'Maven3') {
-                        sh 'mvn clean package sonar:sonar'
+                script {
+                withSonarQubeEnv('sonarqube-server-test'){
+                sh "mvn sonar:sonar"
                     }
-                }
-            }
+            timeout(time: 1, unit: 'HOURS') {
+            def qqstate=waitForQualityGate()
+            if (qqstate.status !='ok'){
+
+	            error "pipeline failed ${qqstate.status}"
+	            }
+	        }
+        sh mvn clean install
         }
-        stage("Quality Gate") {
-            steps {
-                timeout(time: 1, unit: 'HOURS') {
-                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                    // true = set pipeline to UNSTABLE, false = don't
-                    waitForQualityGate abortPipeline: true
-                }
-            }
         }
     }
+}
 }
 
