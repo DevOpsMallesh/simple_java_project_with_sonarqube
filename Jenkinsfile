@@ -18,7 +18,8 @@ pipeline {
 				script{
               withSonarQubeEnv('scannerHome') {
                 //sh 'mvn sonar:sonar'
-		      sh "${scannerHome}/bin/sonar-scanner"
+		      //sh "${scannerHome}/bin/sonar-scanner"
+		      sh 'mvn clean  package sonar:sonar'
 				}
 				}
 				}
