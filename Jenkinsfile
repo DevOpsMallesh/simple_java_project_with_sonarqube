@@ -15,13 +15,13 @@ pipeline {
 		stage("SonarQube analysis") {
            
             steps {
-				script{
-              withSonarQubeEnv("sonarqube-test") {
+				//script{
+              //withSonarQubeEnv("sonarqube-test") {
                 //sh 'mvn sonar:sonar'
 		      //sh "${scannerHome}/bin/sonar-scanner"
 		      sh 'mvn clean package sonar:sonar'
-				}
-				}
+				//}
+				//}
 				}
 				}
 		stage("Quality Gate and build") {
